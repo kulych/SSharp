@@ -1,0 +1,78 @@
+School assignment for CPP course
+
+Let’s create a very simple programming language called S# that works as follows:
+    All expressions are valued as unsigned 64bit integers, if you write a number 123 it means exactly a 64-bit unsigned 123.
+    You can combine the integers using operators +, -, *, /, %, <, >, ==, !=, prefix ~, && and ||, and group them using parentheses. E.g. (1+2)==(5+6) should be valued 0. All operators work just as in C except for ~ which means logical negation, booleans are represented as 0 and 1.
+    Several expressions can be connected using ; and grouped using braces {} to form a single expression. “Value” of the expression is the value of the last expression in the braces (similarly as in Scheme or R)
+    There is a conditional expression called if which you can use to run conditional code: if (expression) {...} {...}. The ‘else’ branch must always be present, and the parentheses and braces { } are mandatory.
+    There is a special expression write(expression) which prints out the value of an expression to the standard output
+    There is a special expression read() which reads a value from the standard input and returns it
+    You can define your own functions:
+        Definition looks like this: functionName paramA paramB {expression}. In the definition, values paramA and paramB are accessible as ‘variables’. (Their values are perfectly constant thorough the function execution, though — there is no assignment). Note that the braces { } around the function definition are mandatory.
+        Function call is done using the functionName just as with read or write — you put the expressions with the values for the parameters in parentheses behind the functionName and separate the parameters using a comma ,.
+    The program is, as usual in C-style languages, formed by a list of function definitions, and gets ‘executed’ by evaluating the parameter-less function main. Last value in main is used as a return value for the whole program.
+    All identifiers (function names and variable names) are made only of alphabetic characters (i.e. variable name param_1 is invalid for 2 different reasons).
+    Whitespace between separate tokens is ignored.
+
+
+Sample sources:
+
+Binary search, INPUT 0 is <, 1 is >, 2 is =
+
+S# source:
+bins l r ans {
+	if(l==r-1) {
+		write(l)
+	} {
+		if (ans == 0) {
+			write((l+(l+r)/2)/2);
+			bins(l, (l+r)/2, read())
+		} {
+			if (ans == 1) {
+				write((r+(l+r)/2)/2);
+				bins((l+r)/2, r, read())
+			}
+			{
+				if (ans == 2) {
+					write((l+r)/2)
+				} {
+					write(9999)
+				}
+			}
+		}
+	}
+}
+main {
+	write(50);
+	bins(1, 101, read())
+}
+
+Result:
+
+#include <stdio.h>
+#include <stdint.h>
+
+typedef uint64_t u;
+
+u _ssharp_write(u _input) {
+	 printf("%lu\n", _input);
+}
+u _ssharp_read() {
+	u _tmp;
+	scanf("%lu", &_tmp);
+	return _tmp;
+}
+u _ssharp_bins(u _ssharp_l,u _ssharp_r,u _ssharp_ans) {
+	 return ((((_ssharp_l==(_ssharp_r-1))) ? 
+	(_ssharp_write(_ssharp_l))
+	 : ((((_ssharp_ans==0)) ? 
+	(_ssharp_write(((_ssharp_l+((_ssharp_l+_ssharp_r)/2))/2)),_ssharp_bins(_ssharp_l,((_ssharp_l+_ssharp_r)/2),_ssharp_read()))
+	 : ((((_ssharp_ans==1)) ? 
+	(_ssharp_write(((_ssharp_r+((_ssharp_l+_ssharp_r)/2))/2)),_ssharp_bins(((_ssharp_l+_ssharp_r)/2),_ssharp_r,_ssharp_read()))
+	 : ((((_ssharp_ans==2)) ? 
+	(_ssharp_write(((_ssharp_l+_ssharp_r)/2)))
+	 : (_ssharp_write(9999))))))))));
+}
+int main() {
+	 return (_ssharp_write(50),_ssharp_bins(1,101,_ssharp_read()));
+}
