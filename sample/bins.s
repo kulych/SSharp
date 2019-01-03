@@ -21,6 +21,6 @@ bins l r ans {
 	}
 }
 main {
-	write(50);
+	write(51);
 	bins(1, 101, read())
 }
